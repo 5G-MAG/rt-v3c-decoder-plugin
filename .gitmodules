@@ -1,0 +1,3 @@
+[submodule "V3C-Content"]
+	path = V3C-Content
+	url = https://github.com/5G-MAG/rt-v3c-content.git
