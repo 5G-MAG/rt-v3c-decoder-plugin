@@ -1,0 +1,40 @@
+# =============== #
+# Base            #
+# =============== #
+Output/
+*.log
+*.exe
+
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+[Bb]uild/
+[Ee]xported[Oo]bj/
+.vs/
+*.userprefs
+*.csproj
+*.pidb
+*.pidb.meta
+*.suo
+*.sln*
+*.user
+*.unityproj
+*.tmp
+*.svd
+*.vscode
+*.directory
+
+# ============= #
+# Configuration #
+# ============= #
+user_ndk_path
+
+# ========== #
+# External   #
+# ========== #
+External/
+
+# ========== #
+# Notepad++  #
+# ========== #
+*.bak

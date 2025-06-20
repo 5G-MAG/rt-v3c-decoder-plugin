@@ -1,0 +1,19 @@
+5G-MAG RT V3C Decoder Plugin distributed with the following software (binaries):
+
+- Bento4 Software Copyright © Axiomatic Systems LLC , 2002-2014 . All rights reserved.
+
+- libxml2, v2.9.10, MIT license, https://github.com/GNOME/libxml2
+
+- ngtcp2, MIT license
+
+- ngtcp2_crypto_openssl, MIT license
+
+- nghttp3, MIT, github.com/ngtcp2/nghttp3
+
+- libcurl, v7.85.0, https://curl.se/docs/copyright.html
+
+- OpenSSL, v3.0, Apache v2, https://www.openssl.org/
+
+- MediaCodec, v31, Commercial, https://developer.android.com/reference/android/media/MediaCodec
+
+- KHR C++ Binding Generator, MIT license, https://github.com/cginternals/khrbinding-generator
