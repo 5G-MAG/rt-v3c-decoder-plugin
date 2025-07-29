@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2024 InterDigital R&D France
+* Copyright (c) 2025 InterDigital CE Patent Holdings SASU
 * Licensed under the License terms of 5GMAG software (the "License").
 * You may not use this file except in compliance with the License.
 * You may obtain a copy of the License at https://www.5g-mag.com/license .
@@ -135,7 +135,7 @@ void DecoderInterface::onStartEvent(unsigned mediaId)
     LOG_INFO("DecoderInterface::onStartEvent");
 
     std::lock_guard<SpinLock> guard(m_locker);
-    m_Tpkt = std::chrono::system_clock::now().time_since_epoch();
+    m_Tpkt = std::chrono::high_resolution_clock::now();
 
 #if defined DASH_STREAMING || defined UVG_RTP_STREAMING
     if (( m_itemList[mediaId].getMode().compare("dash") == 0)
@@ -509,8 +509,8 @@ void DecoderInterface::idle()
                 //decoding FPS measure
                 if (m_measureFPS)
                 {
-                    std::chrono::duration<double> now;
-                    now = std::chrono::system_clock::now().time_since_epoch();
+                    
+                    auto now = std::chrono::high_resolution_clock::now();
                     m_deltaTpkt = now - m_Tpkt;
                     m_Tpkt = now;
 
@@ -635,7 +635,7 @@ void DecoderInterface::idle()
 #endif
         else
         {
-            std::this_thread::sleep_for(std::chrono::milliseconds{5});
+            std::this_thread::sleep_for(std::chrono::microseconds{100});
         }
     }
 }

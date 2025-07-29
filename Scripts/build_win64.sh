@@ -52,10 +52,6 @@ if [ ! -d "${TMC2_DIR}" ] ; then echo "run dl_deps.sh to install tmc2 dependenci
 if [ ! -d "${MHRM_DIR}" ] ; then echo "run dl_deps.sh to install mhrm dependencies" ; exit; fi
 if [ ! -d "${AVCODEC_DIR}" ] ; then echo "${AVCODEC_DIR} not found" ; exit; fi
 
-mkdir -p ${PROJECT_DIR}/Output/Windows/${MODE}/x86_64
-cp 	${AVCODEC_DIR}/bin/*.dll \
-${PROJECT_DIR}/Output/Windows/${MODE}/x86_64
-
 ### find Visual Studio latest version
 VS_EXE=/C/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/Installer/vswhere.exe
 A=`"$VS_EXE" -nologo -latest -property catalog_productName`
@@ -76,30 +72,34 @@ if [ "$MODE" == "Clean" ]; then
 	exit 0;
 fi
 
+mkdir -p ${PROJECT_DIR}/Output/Windows/${MODE}/x86_64
+cp 	${AVCODEC_DIR}/bin/*.dll \
+${PROJECT_DIR}/Output/Windows/${MODE}/x86_64
+
 ### zlib
 if [[ "$COMPIL_ZLIB" == "ON" ]]; then
 	echo -e "\033[0;32mBuild: ${ZLIB_DIR} \033[0m";
-	mkdir -p ${ZLIB_DIR}/build/msvc/release
-	cd ${ZLIB_DIR}/build/msvc/release
+	mkdir -p ${ZLIB_DIR}/build/msvc/${INSTALL_MODE}
+	cd ${ZLIB_DIR}/build/msvc/${INSTALL_MODE}
 	rm -f CMakeLists.txt
 	cmake \
 		-G"$MS_GENERATOR" \
 		-DCMAKE_INSTALL_PREFIX=${ZLIB_DIR}/Windows/x86_64 \
 		${ZLIB_DIR}
-	cmake --build . --config Release --target install --parallel
+	cmake --build . --config ${MODE} --target install --parallel
 fi
 
 ### glfw
 if [[ "$COMPIL_GLFW" == "ON" ]]; then
 	echo -e "\033[0;32mBuild: ${GLFW_DIR} \033[0m";
-	mkdir -p ${GLFW_DIR}/build/msvc/release
-	cd ${GLFW_DIR}/build/msvc/release
+	mkdir -p ${GLFW_DIR}/build/msvc/${INSTALL_MODE}
+	cd ${GLFW_DIR}/build/msvc/${INSTALL_MODE}
 	rm -f CMakeLists.txt
 	cmake \
 		-G"$MS_GENERATOR" \
 		-DCMAKE_INSTALL_PREFIX=${GLFW_DIR}/Windows/x86_64 \
 		${GLFW_DIR}
-	cmake --build . --config Release --target install --parallel
+	cmake --build . --config ${MODE} --target install --parallel
 fi
 
 ### tmiv
@@ -131,10 +131,11 @@ if [[ "$COMPIL_TMC2" == "ON" ]]; then
 	cd ${TMC2_DIR}/build/msvc/${INSTALL_MODE}
 	cmake \
 		-G"$MS_GENERATOR" \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
 		-DLINKER=SHARED \
 		-DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON \
 		-DUSE_JMAPP_VIDEO_CODEC=FALSE \
-		-DUSE_HMAPP_VIDEO_CODEC=FALSE \
+		-DUSE_HMAPP_VIDEO_CODEC=TRUE \
 		-DUSE_SHMAPP_VIDEO_CODEC=FALSE \
 		-DUSE_JMLIB_VIDEO_CODEC=FALSE \
 		-DUSE_HMLIB_VIDEO_CODEC=TRUE \
@@ -152,6 +153,7 @@ if [[ "$COMPIL_TMC2" == "ON" ]]; then
 		${TMC2_DIR}/bin/${MODE}/PccLibCommon.dll \
 		${TMC2_DIR}/bin/${MODE}/PccLibDecoder.dll \
 		${TMC2_DIR}/bin/${MODE}/PccLibVideoDecoder.dll \
+		${TMC2_DIR}/bin/${MODE}/PccLibHevcParser.dll \
 	${PROJECT_DIR}/Output/Windows/${MODE}/x86_64
 fi
 
@@ -162,6 +164,7 @@ if [[ "$COMPIL_MHRM" == "ON" ]]; then
 	cd ${MHRM_DIR}/build/msvc/${INSTALL_MODE}
 	cmake \
 		-G"$MS_GENERATOR" \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
 		-DENABLE_CLANG_TIDY=FALSE \
 		-DBUILD_DECODER=OFF \
 		-DBUILD_ENCODER=OFF \
@@ -186,6 +189,9 @@ if [[ "$COMPIL_PROJECT" == "ON" ]]; then
 		-DTMIV_LIB_DIR=${TMIV_DIR}/${INSTALL_MODE}/msvc/lib \
 		-DTMC2_DIR=${TMC2_DIR} \
 		-DTMC2_LIB_DIR=${TMC2_DIR}/lib/${MODE} \
+		-DMHRM_DIR=${MHRM_DIR} \
+		-DMHRM_LIB_DIR=${MHRM_DIR}/build/msvc/${INSTALL_MODE}/source \
+		-DMHRM_LIB_DEPS=${MHRM_DIR}/build/msvc/${INSTALL_MODE}/_deps \
 		-DBUILD_MODE=${MODE} \
         -DUSE_DASH=${COMPIL_DASH} \
 		-DUSE_STREAMING_LOG="false" \
