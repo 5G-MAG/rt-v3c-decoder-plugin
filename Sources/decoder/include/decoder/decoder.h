@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2024 InterDigital R&D France
+* Copyright (c) 2025 InterDigital CE Patent Holdings SASU
 * Licensed under the License terms of 5GMAG software (the "License").
 * You may not use this file except in compliance with the License.
 * You may obtain a copy of the License at https://www.5g-mag.com/license .
@@ -68,9 +68,9 @@ private:
 
     bool m_measureFPS = false;
 
-    std::chrono::duration<double> m_deltaTpkt{0};
-    std::chrono::duration<double> m_Tpkt{0};
-    std::queue<std::chrono::duration<double>> m_queueDTpkt;
+    std::chrono::nanoseconds m_deltaTpkt;
+    std::chrono::steady_clock::time_point m_Tpkt;
+    std::queue<std::chrono::nanoseconds> m_queueDTpkt;
     std::mutex m_queueMutex;
     int m_queueMaxSize = 1000;
 
@@ -110,14 +110,13 @@ public:
     double getDecoderFPS() override
     {        
         double val = -1.0;
-        std::chrono::duration<double> dt;
-        
+       
         m_queueMutex.lock();
         if (!m_queueDTpkt.empty())
         {
-            dt = m_queueDTpkt.front();
+            auto dt = m_queueDTpkt.front();
             m_queueDTpkt.pop();
-            val = 0.001 * std::chrono::duration_cast<std::chrono::milliseconds>(dt).count();
+            val = 0.000001 * std::chrono::duration_cast<std::chrono::microseconds>(dt).count();
         }
         m_queueMutex.unlock();
         return val;

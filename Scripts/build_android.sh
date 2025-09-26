@@ -157,10 +157,6 @@ if [ ! -d "${MHRM_DIR}" ] ; then echo "run dl_deps.sh to install mhrm dependenci
 if [ ! -d "${NINJA_DIR}" ] ; then echo "run dl_deps.sh ninja to install dependencies" ; exit; fi
 if [ ! -d "${AVCODEC_DIR}" ] ; then echo "${AVCODEC_DIR} not found" ; exit; fi
 
-mkdir -p ${PROJECT_DIR}/Output/Android/${MODE}/${ABI}
-cp 	${AVCODEC_DIR}/lib/*.so \
-${PROJECT_DIR}/Output/Android/${MODE}/${ABI}
-
 ### clean mode
 if [ "$MODE" == "Clean" ]; then
 	echo -e "\033[0;32mClean: ${FMT_DIR} \033[0m";	    rm -rf ${FMT_DIR}/build/android;
@@ -172,6 +168,9 @@ if [ "$MODE" == "Clean" ]; then
 	exit 0;
 fi
 
+mkdir -p ${PROJECT_DIR}/Output/Android/${MODE}/${ABI}
+cp 	${AVCODEC_DIR}/lib/*.so \
+${PROJECT_DIR}/Output/Android/${MODE}/${ABI}
 
 ### fmt
 if [[ "$COMPIL_FMT" == "ON" || ! -d "${FMT_DIR}/build/android/${ABI}" ]]; then
@@ -224,6 +223,7 @@ if [[ "$COMPIL_TMC2" == "ON" || ! -d "${TMC2_DIR}/build/android/${ABI}/${MODE}" 
 	cd ${TMC2_DIR}/build/android/${ABI}/${MODE}
 	cmake \
 		-G"Ninja" \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
 		-DCMAKE_MAKE_PROGRAM=${NINJA_EXE} \
 		-DCMAKE_TOOLCHAIN_FILE=${ANDROID_NDK}/build/cmake/android.toolchain.cmake \
 		-DCMAKE_BUILD_TYPE=${MODE} \
@@ -255,6 +255,7 @@ if [[ "$COMPIL_MHRM" == "ON" || ! -d "${MHRM_DIR}/build/android/${ABI}/${MODE}" 
 	cd ${MHRM_DIR}/build/android/${ABI}/${MODE}
 	cmake \
 		-G"Ninja" \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
 		-DCMAKE_MAKE_PROGRAM=${NINJA_EXE} \
 		-DCMAKE_TOOLCHAIN_FILE=${ANDROID_NDK}/build/cmake/android.toolchain.cmake \
 		-DCMAKE_BUILD_TYPE=${MODE} \
@@ -291,6 +292,9 @@ if [[ "$COMPIL_PROJECT" == "ON" ]]; then
 		-DTMIV_LIB_DIR=${TMIV_DIR}/${INSTALL_MODE}/android/${ABI}/lib \
 		-DTMC2_DIR=${TMC2_DIR} \
 		-DTMC2_LIB_DIR=${TMC2_DIR}/lib \
+		-DMHRM_DIR=${MHRM_DIR} \
+		-DMHRM_LIB_DIR=${MHRM_DIR}/build/android/${ABI}/${MODE}/source \
+		-DMHRM_LIB_DEPS=${MHRM_DIR}/build/android/${ABI}/${MODE}/_deps \
 		-DBUILD_MODE=${MODE} \
         -DUSE_DASH=${COMPIL_DASH} \
 		-DUSE_STREAMING_LOG="false" \

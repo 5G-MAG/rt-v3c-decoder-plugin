@@ -17,16 +17,14 @@ Libraries components are:
 - V3C DASH Streamer Client, a DASH client to receive V3C DASH segments from a remote DASH server
   - V3C Dash Streamer (lib name v3c_dash_streamer, ownership InterDigital R&D France)
   - V3C Extractor (lib name v3c_extractor, ownership InterDigital R&D France)
-- V-PCC Synthesizer (lib name V3CImmersiveSynthesizerVPCC, ownership InterDigital R&D France)
 - MIV MPI Synthesizer (lib name V3CImmersiveSynthesizerMPI, ownership InterDigital R&D France)
 - MIV MVD Synthesizer (lib name V3CImmersiveSynthesizerMES, ownership Philips)
-- Haptic Synthesizer (lib name V3CImmersiveSynthesizerHaptic, ownership InterDigital R&D France)
-- ILOJ Toolkit (lib name iloj[j], ownership InterDigital R&D France)
-  - ILOJ AVCodec Wrapper (lib name iloj_avcodec_hwdec, ownership InterDigital R&D France)
+- ILOJ Toolkit (lib name iloj*, ownership InterDigital R&D France)
+  - ILOJ AVCodec Wrapper (lib name iloj_avcodec_*, ownership InterDigital R&D France)
 
-A related Unity project ([V3C Unity Player](https://github.com/5G-MAG/rt-v3c-unity-player)) allows MIV and V-PCC data view with a simple user interface and Windows/Android support.
+A related Unity project (V3C Unity Player) allows MIV and V-PCC data view with a simple user interface and Windows/Android support. It can be found here: [Unity Player application](https://github.com/5G-MAG/rt-v3c-unity-player).
 
-V3C test contents (MIV and V-PCC) are provided in [V3C content](https://github.com/5G-MAG/rt-v3c-content) project.
+V3C test content (MIV and V-PCC) are provided in [V3C content](https://github.com/5G-MAG/rt-v3c-content) project.
 
 ## Cloning
 
@@ -43,7 +41,6 @@ git clone --recurse-submodules https://github.com/5G-MAG/rt-v3c-decoder-plugin.g
 Before compiling the project, you need to install dependencies. You can use the following script:  
 
 ```shell
-cd rt-v3c-decoder-plugin
 ./Scripts/dl_deps.sh
 ```
 
