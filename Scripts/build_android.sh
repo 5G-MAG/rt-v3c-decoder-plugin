@@ -26,16 +26,29 @@ USERNAME=$(whoami)
 USER=${USERNAME##*+}
 
 ### retrieve Android SDK and NDK path
-if [ -f "./user_ndk_path" ]
+# default SDK folder for the host
+case "$(uname -s)" in
+	Linux*)  DEFAULT_SDK="${HOME}/Android/Sdk" ;;
+	Darwin*) DEFAULT_SDK="${HOME}/Library/Android/sdk" ;;
+	*)       DEFAULT_SDK="/c/Users/${USER}/AppData/Local/Android/Sdk" ;;
+esac
+
+if [ -n "${ANDROID_NDK:-}" ] || [ -n "${ANDROID_NDK_ROOT:-}" ]
+then
+	# NDK given by the environment: no prompt, so the script can run unattended
+	ANDROID_NDK="${ANDROID_NDK:-$ANDROID_NDK_ROOT}"
+	ANDROID_SDK="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-$(cd "${ANDROID_NDK}/../.." && pwd)}}"
+	echo "Using ANDROID_NDK=${ANDROID_NDK} and ANDROID_SDK=${ANDROID_SDK}"
+elif [ -f "./user_ndk_path" ]
 then 
 	echo "Using saved configuration to retrieve Android SDK and NDK path."
-	ANDROID_SDK="/c/Users/$USER/AppData/Local/Android/Sdk"
+	ANDROID_SDK="${DEFAULT_SDK}"
 	ANDROID_NDK=$(head -n 1 "user_ndk_path")
 else
 		
 	BUILD_PATH="$PWD"
-	ANDROID_SDK="/c/Users/${USER}/AppData/Local/Android/Sdk"
-	ANDROID_NDK="/c/Users/${USER}/AppData/Local/Android/Sdk/ndk"
+	ANDROID_SDK="${DEFAULT_SDK}"
+	ANDROID_NDK="${DEFAULT_SDK}/ndk"
 
 	cd $ANDROID_NDK
 	echo "Looking for Android NDKs in $PWD"
