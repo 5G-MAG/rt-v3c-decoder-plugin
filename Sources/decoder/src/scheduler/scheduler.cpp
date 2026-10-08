@@ -11,6 +11,7 @@
 
 #include <iloj/misc/json.h>
 #include <iloj/misc/packet.h>
+#include <main/stats.h>
 #include <scheduler/scheduler.h>
 
 using namespace iloj::misc;
@@ -116,6 +117,8 @@ void SchedulerInterface::VideoScheduler::idle()
             if (dt.count() < 0)
             {
                 m_masterClock->updateOffset(-dt);
+                decoderStats().framesLate++;
+                decoderStats().lastLateMs = static_cast<unsigned long long>(std::abs(dt.count()));
                 LOG_WARNING("Delay Videos: ", std::abs(dt.count()), "ms, global offset is: ", m_masterClock->getOffset().count(), "ms");
             }
             if (dt < m_jitter)
@@ -130,6 +133,7 @@ void SchedulerInterface::VideoScheduler::idle()
                 if (m_videoInterface)
                 {
                     m_videoInterface->onSampleEvent(m_input.front());
+                    decoderStats().framesPresented++;
                 }
 
                 m_input.pop();

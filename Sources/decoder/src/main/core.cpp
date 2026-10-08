@@ -9,6 +9,7 @@
 * See the License for the specific language governing permissions and limitations under the License.
 */
 
+#include <main/stats.h>
 #include <cstring>
 #include <main/interface.h>
 #include <unity/IUnityGraphics.h>
@@ -334,6 +335,19 @@ extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API SetQualityProfile(uns
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Media management
+// Fills out[0..count) with: frames presented, late frames, lateness of the last late frame (ms),
+// chunks received, payload bytes received. Counters only grow; subtract two readings for a rate.
+extern "C" void UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetDecoderStats(unsigned long long *out, int count)
+{
+    const unsigned long long values[] = {decoderStats().framesPresented.load(), decoderStats().framesLate.load(),
+                                         decoderStats().lastLateMs.load(), decoderStats().chunks.load(),
+                                         decoderStats().bytes.load()};
+    for (int i = 0; out != nullptr && i < count && i < 5; i++)
+    {
+        out[i] = values[i];
+    }
+}
+
 extern "C" unsigned UNITY_INTERFACE_EXPORT UNITY_INTERFACE_API GetNumberOfMedia()
 {
     if (g_interface)

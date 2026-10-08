@@ -10,6 +10,7 @@
 */
 
 
+#include <main/stats.h>
 #include <streaming/network_interface.h>
 #include <iloj/misc/filesystem.h>
 #include <iloj/misc/logger.h>
@@ -501,6 +502,9 @@ void NetworkInterface::updateItemForDash()
 
         // finalize the header
         auto& header = chunk.getHeader();
+
+        decoderStats().chunks++;
+        decoderStats().bytes += header.getDataSize();
 
         // error handling
         if (header.getErrorStreamer() != 0)
