@@ -111,6 +111,20 @@ const std::map<CURLcode, std::string> curlCodeMap{
     {CURLcode::CURL_UNKNOWN,               "unknown error"}
 };
 
+// Log text for a streamer or network status code. A code outside the tables must not stop the player
+// from reporting the error, so these never throw.
+inline std::string dashCodeText(DASHCcode key)
+{
+    auto it = dashCodeMap.find(key);
+    return it != dashCodeMap.end() ? it->second : "unknown streamer code " + std::to_string(static_cast<int>(key));
+}
+
+inline std::string curlCodeText(CURLcode key)
+{
+    auto it = curlCodeMap.find(key);
+    return it != curlCodeMap.end() ? it->second : "unknown network status " + std::to_string(static_cast<int>(key));
+}
+
 struct DashError {
     unsigned int code;
     char message[256];

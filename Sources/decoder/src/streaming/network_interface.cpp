@@ -508,8 +508,8 @@ void NetworkInterface::updateItemForDash()
             DASHCcode keyD = static_cast<DASHCcode>(header.getErrorStreamer());
             CURLcode keyC = static_cast<CURLcode>(m_dashSegmentReceiver.getDashNetworkStatus());
 
-            std::string logMsgD = dashCodeMap.at(keyD);
-            std::string logMsgC = curlCodeMap.at(keyC);
+            std::string logMsgD = dashCodeText(keyD);
+            std::string logMsgC = curlCodeText(keyC);
 
             LOG_ERROR("RunTime Streamer Error = ", logMsgD);
             LOG_ERROR("Network status, ", logMsgC);
