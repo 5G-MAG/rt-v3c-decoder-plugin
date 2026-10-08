@@ -146,7 +146,7 @@ MHRM_DIR=${PROJECT_DIR}/External/mpeg-haptics-rm/${MHRM_VER}
 
 NINJA_VER=1.11.1
 NINJA_DIR=${PROJECT_DIR}/External/ninja/${NINJA_VER}
-NINJA_EXE="${NINJA_DIR}/ninja.exe"
+if [ -x "${NINJA_DIR}/ninja" ]; then NINJA_EXE="${NINJA_DIR}/ninja"; else NINJA_EXE="${NINJA_DIR}/ninja.exe"; fi
 
 ### check dependencies
 echo -e "\033[0;32mCheck dependencies\033[0m";

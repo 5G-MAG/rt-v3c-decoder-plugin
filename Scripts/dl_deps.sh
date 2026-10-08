@@ -15,15 +15,20 @@ TMIV_VER=23.0
 TMC2_VER=25.0
 MHRM_VER=5.1
 
-# get ninja
+# get ninja (the archive that matches the host)
+case "$(uname -s)" in
+	Linux*)  NINJA_ZIP=ninja-linux.zip ;;
+	Darwin*) NINJA_ZIP=ninja-mac.zip ;;
+	*)       NINJA_ZIP=ninja-win.zip ;;
+esac
 NINJA_DIR=ninja/${NINJA_VER}
 if [[ ! -d "${NINJA_DIR}" ]] ; then
 	echo --- download ninja ${NINJA_VER}
 	mkdir -p ninja/${NINJA_VER}
-	curl -L https://github.com/ninja-build/ninja/releases/download/v${NINJA_VER}/ninja-win.zip --output ninja/${NINJA_VER}/ninja-win.zip
+	curl -L https://github.com/ninja-build/ninja/releases/download/v${NINJA_VER}/${NINJA_ZIP} --output ninja/${NINJA_VER}/${NINJA_ZIP}
 	cd ninja/${NINJA_VER}
-	unzip -q ninja-win.zip
-	rm -f ninja-win.zip
+	unzip -q ${NINJA_ZIP}
+	rm -f ${NINJA_ZIP}
 	curl https://raw.githubusercontent.com/ninja-build/ninja/master/COPYING > COPYING
 	cd ../..
 fi
