@@ -59,8 +59,7 @@ add_library(iloj::iloj STATIC IMPORTED)
 
 set_target_properties(iloj::iloj PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "\$<LINK_ONLY:-pthread>;\$<LINK_ONLY:dl>;\$<LINK_ONLY:EGL>;\$<LINK_ONLY:GLESv3>;\
-${ANDROID_NDK}/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/aarch64-linux-android/35/libz.so"
+  INTERFACE_LINK_LIBRARIES "\$<LINK_ONLY:-pthread>;\$<LINK_ONLY:dl>;\$<LINK_ONLY:EGL>;\$<LINK_ONLY:GLESv3>;\$<LINK_ONLY:z>"
 )
 
 # Load information for each installed configuration.
