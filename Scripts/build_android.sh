@@ -130,7 +130,7 @@ PROJECT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 AVCODEC_VER=7.1
 AVCODEC_DIR=${PROJECT_DIR}/External/avcodec/${AVCODEC_VER}/Android/${ABI}
 
-ILOJ_LIBS=${PROJECT_DIR}/Libraries/iloj/${MODE}/android/${ABI}
+ILOJ_LIBS=${PROJECT_DIR}/Libraries/iloj/${INSTALL_MODE}/android/${ABI}
 
 FMT_VER=11.0.2
 FMT_DIR=${PROJECT_DIR}/External/fmt/${FMT_VER}

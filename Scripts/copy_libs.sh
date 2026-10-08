@@ -23,6 +23,9 @@ then
 
 	SC_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
+	# the folders under Libraries/iloj/ are named in lower case (release, debug)
+	MODE_DIR=$(echo "${MODE}" | tr '[:upper:]' '[:lower:]')
+
 	## Windows
 	if [ $3 == "Windows" ]
 	then 
@@ -31,7 +34,7 @@ then
 		if [ -d ${SC_DIR}/../Output/Windows/${MODE}/x86_64 -a -d ${SC_DIR}/../Libraries/Windows/${MODE}/x86_64 ]; then 
 			cp ${SC_DIR}/../Output/Windows/${MODE}/x86_64/*.dll \
 			$1
-			cp ${SC_DIR}/../Libraries/iloj/${MODE}/msvc/bin/*.dll \
+			cp ${SC_DIR}/../Libraries/iloj/${MODE_DIR}/msvc/bin/*.dll \
 			$1
 			cp ${SC_DIR}/../Libraries/Windows/${MODE}/x86_64/*.dll \
 			$1
@@ -45,13 +48,13 @@ then
 	then 
 		mkdir -p $1/Android/libs/arm64-v8a
 		echo -e "\033[0;32mCopy Android so & jar for ${MODE}\033[0m";
-		if [ -f ${SC_DIR}/../Libraries/iloj/${MODE}/android/V3CImmersiveDecoderVideo.jar -a -d ${SC_DIR}/../Output/Android/${MODE}/arm64-v8a -a -d ${SC_DIR}/../Libraries/Android/${MODE}/arm64-v8a/ ]; then 
+		if [ -f ${SC_DIR}/../Libraries/iloj/${MODE_DIR}/android/V3CImmersiveDecoderVideo.jar -a -d ${SC_DIR}/../Output/Android/${MODE}/arm64-v8a -a -d ${SC_DIR}/../Libraries/Android/${MODE}/arm64-v8a/ ]; then 
 
-			cp ${SC_DIR}/../Libraries/iloj/${MODE}/android/V3CImmersiveDecoderVideo.jar \
+			cp ${SC_DIR}/../Libraries/iloj/${MODE_DIR}/android/V3CImmersiveDecoderVideo.jar \
 			$1/Android
 			cp ${SC_DIR}/../Output/Android/${MODE}/arm64-v8a/*.so \
 			$1/Android/libs/arm64-v8a
-			cp ${SC_DIR}/../Libraries/iloj/${MODE}/android/arm64-v8a/lib/*.so \
+			cp ${SC_DIR}/../Libraries/iloj/${MODE_DIR}/android/arm64-v8a/lib/*.so \
 			$1/Android/libs/arm64-v8a
 			cp ${SC_DIR}/../Libraries/Android/${MODE}/arm64-v8a/*.so \
 			$1/Android/libs/arm64-v8a
@@ -64,13 +67,13 @@ then
 	if [ $3 == "AndroidStudio" ]
 	then 
 		echo -e "\033[0;32mCopy Android Studio so & jar for ${MODE}\033[0m";
-		if [ -f ${SC_DIR}/../Libraries/iloj/${MODE}/android/V3CImmersiveDecoderVideo.jar -a -d ${SC_DIR}/../Output/Android/${MODE}/arm64-v8a -a -d ${SC_DIR}/../Libraries/Android/${MODE}/arm64-v8a/ ]; then 
+		if [ -f ${SC_DIR}/../Libraries/iloj/${MODE_DIR}/android/V3CImmersiveDecoderVideo.jar -a -d ${SC_DIR}/../Output/Android/${MODE}/arm64-v8a -a -d ${SC_DIR}/../Libraries/Android/${MODE}/arm64-v8a/ ]; then 
 
-			cp ${SC_DIR}/../Libraries/iloj/${MODE}/android/V3CImmersiveDecoderVideo.jar \
+			cp ${SC_DIR}/../Libraries/iloj/${MODE_DIR}/android/V3CImmersiveDecoderVideo.jar \
 			$1/libs
 			cp ${SC_DIR}/../Output/Android/${MODE}/arm64-v8a/*.so \
 			$1/src/main/jniLibs/arm64-v8a
-			cp ${SC_DIR}/../Libraries/iloj/${MODE}/android/arm64-v8a/lib/*.so \
+			cp ${SC_DIR}/../Libraries/iloj/${MODE_DIR}/android/arm64-v8a/lib/*.so \
 			$1/src/main/jniLibs/arm64-v8a
 			cp ${SC_DIR}/../Libraries/Android/${MODE}/arm64-v8a/*.so \
 			$1/src/main/jniLibs/arm64-v8a
