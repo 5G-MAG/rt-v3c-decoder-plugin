@@ -9,6 +9,8 @@
 * See the License for the specific language governing permissions and limitations under the License.
 */
 
+#include <algorithm>
+#include <thread>
 #include <client/reader.h>
 #include <iloj/misc/filesystem.h>
 
@@ -109,14 +111,21 @@ void ReaderInterface::updateItem()
         m_stop = false;
     }
 
+    // idle() is called again as soon as it returns, so waiting must sleep: returning at once makes this thread spin
+    // on the clock and take a whole CPU core
+    constexpr std::chrono::duration<double> idlePoll = std::chrono::milliseconds{5};
+
     if (m_stop)
     {
+        std::this_thread::sleep_for(idlePoll);
         return;
     }
 
     // check if delay is reached
-    if (std::chrono::system_clock::now().time_since_epoch() < m_checkpoint)
+    auto now = std::chrono::system_clock::now().time_since_epoch();
+    if (now < m_checkpoint)
     {
+        std::this_thread::sleep_for(std::min<std::chrono::duration<double>>(m_checkpoint - now, idlePoll));
         return;
     }
 
