@@ -11,6 +11,8 @@
 
 #include <iloj/misc/json.h>
 #include <iloj/misc/packet.h>
+#include <algorithm>
+#include <thread>
 #include <scheduler/scheduler.h>
 
 using namespace iloj::misc;
@@ -77,6 +79,11 @@ void SchedulerInterface::AudioScheduler::idle()
 
 
             }
+            else
+            {
+                // not due yet: sleep instead of spinning on the clock (see VideoScheduler::idle)
+                std::this_thread::sleep_for(std::min<std::chrono::milliseconds>(dt - m_latency, std::chrono::milliseconds{5}));
+            }
             
         }
     }
@@ -134,6 +141,13 @@ void SchedulerInterface::VideoScheduler::idle()
 
                 m_input.pop();
             }
+            else
+            {
+                // the frame is not due yet. idle() is called again as soon as it returns, so sleeping here keeps this
+                // thread from spinning on the clock; at most one poll interval, so a stop request is still seen
+                constexpr std::chrono::milliseconds idlePoll{5};
+                std::this_thread::sleep_for(std::min<std::chrono::milliseconds>(dt - m_jitter, idlePoll));
+            }
         }
     }
     catch (std::exception e)
@@ -187,6 +201,11 @@ void SchedulerInterface::HapticScheduler::idle()
                 }
 
                 m_input.pop();
+            }
+            else
+            {
+                // not due yet: sleep instead of spinning on the clock (see VideoScheduler::idle)
+                std::this_thread::sleep_for(std::min<std::chrono::milliseconds>(dt - m_latency, std::chrono::milliseconds{5}));
             }
         }
     }
