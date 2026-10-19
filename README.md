@@ -1,132 +1,156 @@
-<h1 align="center">V3C Immersive Platform - Decoder Plugin</h1>
 <p align="center">
-  <img src="https://img.shields.io/badge/Status-Under_Development-yellow" alt="Under Development">
-  <img src="https://img.shields.io/badge/License-5G--MAG%20Public%20License%20(v1.0)-blue" alt="License">
+  <img src=".github/banner.svg" width="100%" alt="Reference Tools · MPEG V3C Immersive Platform: V3C Decoder Plugin">
 </p>
 
-# Introduction
+<p align="center">
+  Source code and libraries for decoding and viewing MPEG Immersive Video (MIV) and Video Point
+  Cloud Compression (V-PCC) content on the V3C Immersive Platform.
+</p>
 
-This project contains the entrypoints for decoding and viewing MPEG Immersive Video (MIV) and Video Point Cloud Compression (V-PCC) related to the V3C Immersive Platform.
+<p align="center">
+  <img alt="Status" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fwww.5g-mag.com%2Fbadges%2Fstatus%2Frt-v3c-decoder-plugin.json">
+  <a href="https://github.com/5G-MAG/rt-v3c-decoder-plugin/releases"><img alt="Version"
+    src="https://img.shields.io/github/v/release/5G-MAG/rt-v3c-decoder-plugin?label=Version"></a>
+  <a href="License.md"><img alt="License: 5G-MAG Public License v1.0"
+    src="https://img.shields.io/badge/License-5G--MAG%20PL%20v1.0-blue"></a>
+</p>
 
-It contains source code of V3C native decoder (in `./Sources` folder) and compiled libraries (in `./Libraries` folder) as illustrated in the figure below.
+<p align="center">
+  <a href="https://www.5g-mag.com/reference-tools/v3c/">Project page</a> &nbsp;&middot;&nbsp;
+  <a href="https://github.com/5G-MAG/rt-v3c-decoder-plugin/issues">Issues</a> &nbsp;&middot;&nbsp;
+  <a href="https://www.5g-mag.com/contributing">Contributing</a>
+</p>
+
+---
+
+## At a glance
+
+|  |  |
+|---|---|
+| **Part of** | [MPEG V3C Immersive Platform](https://www.5g-mag.com/reference-tools/v3c/), alongside [rt-media-origin](https://github.com/5G-MAG/rt-media-origin), [rt-v3c-content](https://github.com/5G-MAG/rt-v3c-content), [rt-v3c-examples](https://github.com/5G-MAG/rt-v3c-examples), [rt-v3c-unity-player](https://github.com/5G-MAG/rt-v3c-unity-player) |
+
+## Introduction
+
+This repository holds the entry points for decoding and viewing MIV and V-PCC content on the V3C
+Immersive Platform: the source code of the V3C native decoder, in `./Sources`, and precompiled
+libraries, in `./Libraries`. It builds the libraries that
+[rt-v3c-unity-player](https://github.com/5G-MAG/rt-v3c-unity-player) uses to play MIV and V-PCC
+content on Windows and Android, and it includes
+[rt-v3c-content](https://github.com/5G-MAG/rt-v3c-content), the V3C test content, as the Git
+submodule `V3C-Content`.
 
 ![V3CImmersivePlatform components](docs/images/v3c-immersive-player-component.png)
 
-Libraries components are:
+The precompiled libraries are:
 
-- V3C DASH Streamer Client, a DASH client to receive V3C DASH segments from a remote DASH server
-  - V3C Dash Streamer (lib name v3c_dash_streamer, ownership InterDigital R&D France)
-  - V3C Extractor (lib name v3c_extractor, ownership InterDigital R&D France)
-- MIV MPI Synthesizer (lib name V3CImmersiveSynthesizerMPI, ownership InterDigital R&D France)
-- MIV MVD Synthesizer (lib name V3CImmersiveSynthesizerMES, ownership Philips)
-- ILOJ Toolkit (lib name iloj*, ownership InterDigital R&D France)
-  - ILOJ AVCodec Wrapper (lib name iloj_avcodec_*, ownership InterDigital R&D France)
+| Component | Library | Owner |
+|---|---|---|
+| V3C DASH Streamer Client: V3C Dash Streamer | v3c_dash_streamer | InterDigital R&D France |
+| V3C DASH Streamer Client: V3C Extractor | v3c_extractor | InterDigital R&D France |
+| MIV MPI Synthesizer | V3CImmersiveSynthesizerMPI | InterDigital R&D France |
+| MIV MVD Synthesizer | V3CImmersiveSynthesizerMES | Philips |
+| ILOJ Toolkit | iloj\* | InterDigital R&D France |
+| ILOJ Toolkit: ILOJ AVCodec Wrapper | iloj_avcodec_\* | InterDigital R&D France |
 
-A related Unity project (V3C Unity Player) allows MIV and V-PCC data view with a simple user interface and Windows/Android support. It can be found here: [Unity Player application](https://github.com/5G-MAG/rt-v3c-unity-player).
+The V3C DASH Streamer Client receives V3C DASH segments from a remote DASH server.
 
-V3C test content (MIV and V-PCC) are provided in [V3C content](https://github.com/5G-MAG/rt-v3c-content) project.
+Questions on setting up or using the V3C Immersive Platform are answered in the
+[FAQ in the Unity Player repository](https://github.com/5G-MAG/rt-v3c-unity-player/blob/main/docs/FAQ.md).
 
-## Cloning
+## Install dependencies
 
-To clone the project, use this command line:  
+For the build:
+
+- Visual Studio Professional 2022 (17.14.4)
+- CMake (for example 3.30.4)
+- For Android: Android Studio with NDK r27c (27.2.12479018), and API 35
+- An audio/video decoder library, for example FFmpeg (7.1).
+  [rt-common-shared](https://github.com/5G-MAG/rt-common-shared) has a helper script, in
+  `avcodec-build`, that builds FFmpeg libraries for Android. To use another audio/video decoder
+  library, please contact 5G-MAG.
+
+To run the decoder:
+
+- Windows: a device with an NVIDIA GPU that supports hardware HEVC decoding (CUVID) and OpenGL Core
+  4.5.
+- Android: a device that supports OpenGL ES 3.2 and HEVC hardware decoding (MediaCodec).
+
+## Downloading
+
+Clone with the submodules:
 
 ```shell
 git clone --recurse-submodules https://github.com/5G-MAG/rt-v3c-decoder-plugin.git
 ```
 
-## Dependencies
+## Building
 
-### Install dependencies
+### Dependencies
 
-Before compiling the project, you need to install dependencies. You can use the following script:  
+Before compiling, download the build dependencies with this script:
 
 ```shell
 ./Scripts/dl_deps.sh
 ```
 
-This script will download files or clone git repositories into `./External` folder:
+It downloads files or clones Git repositories into the `./External` folder, and needs a github.com
+account:
 
-- ninja, v1.11.1, [github.com/ninja-build/ninja](https://github.com/ninja-build/ninja)
-- fmt, v11.0.2, [github.com/fmtlib/fmt](https://github.com/fmtlib/fmt.git)
-- zlib, v1.3.1, [github.com/madler/zlib](https://github.com/madler/zlib)
-- glfw, v3.4, [github.com/glfw/glfw](https://github.com/glfw/glfw)
-- tmiv, v23.0, [gitlab.com/mpeg-i-visual/tmiv](https://gitlab.com/mpeg-i-visual/tmiv.git)
-- tmc2, v25.0, [github.com/MPEGGroup/mpeg-pcc-tmc2](https://github.com/MPEGGroup/mpeg-pcc-tmc2.git)
-- mhrm, v5.1, [github.com/MPEGGroup/HapticReferenceSoftware](https://github.com/MPEGGroup/HapticReferenceSoftware.git)
+| Dependency | Version | Source |
+|---|---|---|
+| ninja | v1.11.1 | [github.com/ninja-build/ninja](https://github.com/ninja-build/ninja) |
+| fmt | v11.0.2 | [github.com/fmtlib/fmt](https://github.com/fmtlib/fmt.git) |
+| zlib | v1.3.1 | [github.com/madler/zlib](https://github.com/madler/zlib) |
+| glfw | v3.4 | [github.com/glfw/glfw](https://github.com/glfw/glfw) |
+| tmiv | v23.0 | [gitlab.com/mpeg-i-visual/tmiv](https://gitlab.com/mpeg-i-visual/tmiv.git) |
+| tmc2 | v25.0 | [github.com/MPEGGroup/mpeg-pcc-tmc2](https://github.com/MPEGGroup/mpeg-pcc-tmc2.git) |
+| mhrm | v5.1 | [github.com/MPEGGroup/HapticReferenceSoftware](https://github.com/MPEGGroup/HapticReferenceSoftware.git) |
 
-Note: This script requests to get an account to github.com.
-
-You need to install additional dependencies before compiling:
-
-- Examples of Audio/Video decoder libraries such as FFmpeg (7.1) are available in [rt-common-shared](https://github.com/5G-MAG/rt-common-shared). Should you want to use another Audio/Video decoder libraries, please reach out to us.
-
-Please check the downloaded dependencies and associated licences before compiling in : ./External
-
-## Compiling
-
-You will need following softwares installed on your machine for the build process:  
-
-- Visual Studio Professional 2022 (17.14.4)
-- CMake (for example 3.30.4)
-
-Use the script according to the platform you want to use.
+Check the downloaded dependencies in `./External`, and their licences, before compiling.
 
 ### Compiling for Windows
-
-Use the following script to run the compilation:  
 
 ```shell
 ./Scripts/build_win64.sh release all
 ```  
 
-The script should end with :
- -- Install configuration: "Release"
-
-Then you can check the presence of the build files in the output directory
+The script should end with `-- Install configuration: "Release"`. Then check that the build files are in the output directory:
 
 ```shell
 ls ./Output/Windows/Release/x86_64
 ```
 
-- V3CImmersiveDecoderVideo.dll  
+- V3CImmersiveDecoderVideo.dll
 - AudioPlugin_V3CImmersiveDecoderAudio.dll
 
 ### Compiling for Android
-
-You will need following software installed:
-
-- Android Studio with NDK r27c (27.2.12479018), and API 35
-
-Use the following script to run the compilation:  
 
 ```shell
 ./Scripts/build_android.sh release all  
 ```  
 
-Then you can check the presence of the build files in the output directory
+Then check that the build files are in the output directory:
 
 ```shell
 ls ./Output/Android/Release/arm64-v8a
 ```
 
-- libV3CImmersiveDecoderVideo.so  
+- libV3CImmersiveDecoderVideo.so
 - libAudioPlugin_V3CImmersiveDecoderAudio.so
 
-In addition you should also have .so from TMIV and TMC2.
+The directory should also hold the `.so` files from TMIV and TMC2.
 
-### Hardware Requirement
+## Contributing
 
-On Windows, a device with an NVIDIA GPU card supporting hardware HEVC decoding (CUVID) and OpenGL Core 4.5 is expected.
-On Android, a device supporting OpenGL ES 3.2 and HEVC hardware decoding (MediaCodec) is expected.
+Contributions are welcome. How to raise an issue, fork the repository and open a pull request, and
+the Contributor License Agreement required before code can be merged, are described at
+<https://www.5g-mag.com/contributing>.
 
-## FAQ
+## License
 
-If you have any questions on the setup or the usage of the V3C Immersive Platform, please consult the [FAQ page from the Unity Player repository](https://github.com/5G-MAG/rt-v3c-unity-player)
+Distributed under the 5G-MAG Public License v1.0. See [License.md](License.md); the licence terms
+are also available [online](https://drive.google.com/file/d/1cinCiA778IErENZ3JN52VFW-1ffHpx7Z/view).
 
-## Licenses
-
-This project is provided under 5G-MAG's Public License. For the full license terms, please see the LICENSE file distributed along with the repository or retrieve it from [here](https://drive.google.com/file/d/1cinCiA778IErENZ3JN52VFW-1ffHpx7Z/view).
-
-Distributed with the software (binaries) as listed in: [ATTRIBUTION_NOTICE](ATTRIBUTION_NOTICE.txt).
-
-External dependencies are listed in [dependencies](#dependencies).
+The software distributed with this repository as binaries is listed in
+[ATTRIBUTION_NOTICE](ATTRIBUTION_NOTICE.txt). The external build dependencies are listed under
+[Dependencies](#dependencies).
