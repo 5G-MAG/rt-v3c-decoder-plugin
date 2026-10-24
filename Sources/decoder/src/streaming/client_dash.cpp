@@ -71,8 +71,8 @@ Chunk DashSegmentReceiver::convertToChunk(DashChunk_t *dashChunk)
         DASHCcode keyD = static_cast<DASHCcode>(dashChunk->errorStreamer);
         CURLcode keyC = static_cast<CURLcode>(getNetworkStatus());
 
-        std::string logMsgD = dashCodeMap.at(keyD);
-        std::string logMsgC = curlCodeMap.at(keyC);
+        std::string logMsgD = dashCodeText(keyD);
+        std::string logMsgC = curlCodeText(keyC);
 
         LOG_ERROR("RunTime Streamer Error = ", logMsgD);
         LOG_ERROR("Network status, ", logMsgC);
@@ -125,8 +125,8 @@ void DashSegmentReceiver::initialize()
     if (err != 0)
     {
         logMsgD += ": ";
-        logMsgD += dashCodeMap.at(keyD);
-        std::string logMsgC = curlCodeMap.at(keyC);
+        logMsgD += dashCodeText(keyD);
+        std::string logMsgC = curlCodeText(keyC);
 
         LOG_ERROR("ClientInterface init ", logMsgD);
         LOG_ERROR("Network status, ", logMsgC);
@@ -144,8 +144,8 @@ void DashSegmentReceiver::initialize()
         || (keyD == DASHCcode::DASHCLIENT_ACCESS_TO_HJIF_FAILED))
     {
         logMsgD += ": ";
-        logMsgD += dashCodeMap.at(keyD);
-        std::string logMsgC = curlCodeMap.at(keyC);
+        logMsgD += dashCodeText(keyD);
+        std::string logMsgC = curlCodeText(keyC);
 
         LOG_INFO("ClientInterface hjif ", logMsgD);
         LOG_INFO("Network status, ", logMsgC);
